@@ -2,10 +2,36 @@ const fetchingWeatherData = async (cityName, countryName, unit) => {
 	const responseFlow = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName},${countryName}&appid=d0a335cd5de98c365b55e1468b44cf22&units=${unit}`);
 	const data = await responseFlow.json();
 
-	functionaliteBundle(data);
+	functionalityBundle(data);
 }
 
-fetchingWeatherData("london", "uk", "metric");
+// fetchingWeatherData("london", "uk", "metric");
+
+const fetchingInitialData = async (latitude, longitude) => {
+	const responseFlow = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=d0a335cd5de98c365b55e1468b44cf22&units=metric
+	`);
+	const data = await responseFlow.json();
+
+	functionalityBundle(data);
+}
+
+const options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+
+function success(pos) {
+  let coordinates = pos.coords;
+
+  fetchingInitialData(coordinates.latitude, coordinates.longitude);
+}
+
+function error(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
+navigator.geolocation.getCurrentPosition(success, error, options);
 
 const weatherInformation = data => {
 	const temperatureUnits = document.querySelector("#temperatures").value;
@@ -37,7 +63,7 @@ function selectorsBundle(data, unit) {
 	idSelector('temp-maximum', data.main.temp_max, unit)
 }
 
-addGlobalEventListenerSwitch('click', 'submit', event => {
+addClickEventListenerSwitch('click', 'submit', event => {
 	let cityName = document.querySelector('#city-name').value;
 	let countryName = document.querySelector('#country-name').value;
 	let temperatureUnit = document.querySelector('#temperatures').value;
@@ -58,7 +84,7 @@ addGlobalEventListenerSwitch('click', 'submit', event => {
   	fetchingWeatherData(cityName, countryName, unit);
 })
 
-function addGlobalEventListenerSwitch(type, selector, callback) {
+function addClickEventListenerSwitch(type, selector, callback) {
   document.addEventListener(type, event => {
     const element = event.target.id;
 
@@ -70,7 +96,40 @@ function addGlobalEventListenerSwitch(type, selector, callback) {
   })
 }
 
-function functionaliteBundle(data) {
+addInputlEventListenerSwitch('input', 'temperatures', event => {
+	let cityName = document.querySelector('#city-name').value;
+	let countryName = document.querySelector('#country-name').value;
+	let temperatureUnit = document.querySelector('#temperatures').value;
+
+	let unit;
+
+	if (temperatureUnit === "celsius") {
+	  unit = "metric"
+	} else if (temperatureUnit === "fahrenheit") {
+		unit = "imperial"
+	} else {
+		unit = "kelvin"
+	}
+
+	cityName.length === 0 ? cityName = "london" : cityName = cityName
+	countryName.length === 0 ? countryName = "" : countryName = countryName
+
+  	fetchingWeatherData(cityName, countryName, unit);
+})
+
+function addInputlEventListenerSwitch(type, selector, callback) {
+  document.addEventListener(type, event => {
+    const element = event.target.id;
+
+    switch(element) {
+      case selector:
+        callback(event);
+        break; 
+    }
+  })
+}
+
+function functionalityBundle(data) {
 	weatherInformation(data)
 }
 

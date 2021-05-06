@@ -1,11 +1,11 @@
-const fetchingWeatherData = async (cityName, countryName) => {
-	const responseFlow = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName},${countryName}&appid=d0a335cd5de98c365b55e1468b44cf22&units=metric`);
+const fetchingWeatherData = async (cityName, countryName, unit) => {
+	const responseFlow = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName},${countryName}&appid=d0a335cd5de98c365b55e1468b44cf22&units=${unit}`);
 	const data = await responseFlow.json();
 
 	functionaliteBundle(data);
 }
 
-fetchingWeatherData("london", "uk");
+fetchingWeatherData("london", "uk", "metric");
 
 const weatherInformation = data => {
 	const temperatureUnits = document.querySelector("#temperatures").value;
@@ -40,11 +40,22 @@ function selectorsBundle(data, unit) {
 addGlobalEventListenerSwitch('click', 'submit', event => {
 	let cityName = document.querySelector('#city-name').value;
 	let countryName = document.querySelector('#country-name').value;
+	let temperatureUnit = document.querySelector('#temperatures').value;
+
+	let unit;
+
+	if (temperatureUnit === "celsius") {
+	  unit = "metric"
+	} else if (temperatureUnit === "fahrenheit") {
+		unit = "imperial"
+	} else {
+		unit = "kelvin"
+	}
 
 	cityName.length === 0 ? cityName = "london" : cityName = cityName
 	countryName.length === 0 ? countryName = "" : countryName = countryName
 
-  fetchingWeatherData(cityName, countryName);
+  	fetchingWeatherData(cityName, countryName, unit);
 })
 
 function addGlobalEventListenerSwitch(type, selector, callback) {

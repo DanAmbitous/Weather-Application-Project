@@ -9,7 +9,6 @@
 </head>
 <body>
 	<div id="meta">
-
 		<h1>Weather Application</h1>
 		<p id="header-data">Searching the weather of <strong><span class="country"></span></strong>, <strong><span class="city"></span></strong></p>
 
@@ -30,17 +29,28 @@
 	</div>
 
 	<div id="general-data-container">
-		<p>Country: <strong><span class="country"></span></strong></p>
-		<p>City: <strong><span class="city"></span></strong></p>
-		<img src="" alt="" id="icon" style="float:left;">
-		<p>Main: <strong><span id="main"></span></strong></p>
-		<p>Description: <strong><span id="description"></span></strong></p>
+		<div id="location-data">
+			<p>Country: <strong><span class="country"></span></strong></p>
+			<p>City: <strong><span class="city"></span></strong></p>
+			<p>Latitude: <strong><span id="latitude"></span></strong>°</p>
+			<p>Longitude: <strong><span id="longitude"></span></strong>°</p>
+		</div>		
 
-		<div id="weather-data">
+		<div id="general-weather-data">
+			<img src="" alt="Icon" id="icon" style="width: 10vw; margin: 0; padding: 0;">
+			<p>Main: <strong><span id="main"></span></strong></p>
+			<p>Description: <strong><span id="description"></span></strong></p>
 			<p>Temperature: <strong><span id="temperature" class="temperature-data"></span></strong></p>
 			<p>Feels Like: <strong><span id="feels-like" class="temperature-data"></span></strong></p>
 			<p>Minimum Temperature: <strong><span id="temp-minimum" class="temperature-data"></span></strong></p>
 			<p>Maximum Temperature: <strong><span id="temp-maximum" class="temperature-data"></span></strong></p>
+			<p>Pressure: <strong><span id="pressure"></span></strong></p>
+			<p>Humidity: <strong><span id="humidity"></span></strong></p>
+		</div>
+		
+		<div id="secondary-weather-data">
+			<p>Wind Speed: <strong><span id="wind-speed-data"></span></strong></p>
+			<p>Degree: <strong><span id="wind-degree-data"></span></strong></p>
 		</div>
 	</div>
 </body>

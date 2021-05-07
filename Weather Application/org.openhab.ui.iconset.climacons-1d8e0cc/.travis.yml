@@ -1,0 +1,21 @@
+language: java
+script: mvn clean package -Dcheckstyle.skip=true
+install: true
+branches:
+  only:
+  - master
+  - /^release-.*$/
+before_deploy:
+- git config --local user.name "Yannick Schaus"
+- git config --local user.email "habpanel@schaus.net"
+- export BUNDLE_VERSION=`sed -n 's/Bundle-Version. \([[:digit:]]\.[[:digit:]]\.[[:digit:]]*\)/\1/p' target/MANIFEST.MF | head -c -2`
+- git tag "$BUNDLE_VERSION"
+deploy:
+  provider: releases
+  api_key:
+    secure: j7B3Paf0akIBgMW4iqclvvzkcJNECvIRR49wN7qgf092KQ8/+Z2nKZShn+EOZ4L23XgfSXRy1WmxgBh3DO2PkmsaqaVvwnAVHNCzb7a8kBFsrnNC7i1Bp6GsVkLYBGBa4W3n8f9gh76Ao5gDoWNSEKcQs46uXwp7u+qU811zq/Cj9bRf3dVJqQ0Yqv8R29JHW6qZLPt5ITx3XG2o5Dt/4l3Eg3TBvPMEynWZLaFr+gJFOsd3C9epySPnUjYMAxbPaJL0VuTASZ4NdBluXoRqrweRu+/k/Lvv9zSxuwz6ma+uGkS2t/McCKyLDeUqb5l6TquvfNSKvyqpYG6JBM50TxiV7u+JZJcrJ02GCtx8DbmNMMGsM8taUry7IWonh35Ym68c1c3hqCOzFRh2JbcsQ0wtViIf56VY/j+o1FRS13xkWY9WMPW/LWNMD3lOTH4ROXuu0QZ3JhNmUsvMVtk8lqJOOXD+6oGaZrjFPP2EGOhTM1/oG1HjR2mQzcw9ZxfeTFEt8/hici7YkB2byDZAaPR+rB5CdAoESw7scUXkD/0wLIybVCzSpmfujEkZADMg5v6XzJt+aZT9EzEYAB7pK5Unfon3WdK/XKycM7TLZZCkljgraT/LuhhpgyFlzG87C6TAyf0fNzFCkm+tTz45pG/kuuoNoM0qS1ZQCOS0qh0=
+  file: target/org.openhab.ui.iconset.climacons-2.3.0-SNAPSHOT.jar
+  skip_cleanup: true
+  on:
+    repo: ghys/org.openhab.ui.iconset.climacons
+

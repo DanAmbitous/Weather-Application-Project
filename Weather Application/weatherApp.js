@@ -5,8 +5,6 @@ const fetchingWeatherData = async (cityName, countryName, unit) => {
 	functionalityBundle(data);
 }
 
-// fetchingWeatherData("london", "uk", "metric");
-
 const fetchingInitialData = async (latitude, longitude) => {
 	const responseFlow = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=d0a335cd5de98c365b55e1468b44cf22&units=metric
 	`);
@@ -50,17 +48,29 @@ const weatherInformation = data => {
 
 		selectorsBundle(data, unit)
 	}
+
+	iconAdder(data);
+}
+
+function iconAdder(data) {
+	document.querySelector("#icon").src = `animated/${data.weather[0].icon}.svg`
 }
 
 function selectorsBundle(data, unit) {
 	classSelectorAll('country', data.sys.country)
 	classSelectorAll('city', data.name)
+	idSelector('latitude', data.coord.lat.toFixed(2))
+	idSelector('longitude', data.coord.lon.toFixed(2))
 	idSelector('main', data.weather[0].main)
 	idSelector('description', data.weather[0].description)
 	idSelector('temperature', data.main.temp, unit)
 	idSelector('feels-like', data.main.feels_like, unit)
 	idSelector('temp-minimum', data.main.temp_min, unit)
 	idSelector('temp-maximum', data.main.temp_max, unit)
+	idSelector('pressure', data.main.pressure)
+	idSelector('humidity', data.main.humidity)
+	idSelector('wind-speed-data', data.wind.speed)
+	idSelector('wind-degree-data', data.wind.deg)
 }
 
 addClickEventListenerSwitch('click', 'submit', event => {
@@ -122,6 +132,45 @@ function addInputlEventListenerSwitch(type, selector, callback) {
     const element = event.target.id;
 
     switch(element) {
+      case selector:
+        callback(event);
+        break; 
+    }
+  })
+}
+
+addInputlEventListenerSwitch('keyup', 'Enter', event => {
+	const key = event.key;
+
+	switch(key) {
+		case "Enter":
+			let cityName = document.querySelector('#city-name').value;
+			let countryName = document.querySelector('#country-name').value;
+			let temperatureUnit = document.querySelector('#temperatures').value;
+		
+			let unit;
+		
+			if (temperatureUnit === "celsius") {
+				unit = "metric"
+			} else if (temperatureUnit === "fahrenheit") {
+				unit = "imperial"
+			} else {
+				unit = "kelvin"
+			}
+		
+			cityName.length === 0 ? cityName = "london" : cityName = cityName
+			countryName.length === 0 ? countryName = "" : countryName = countryName
+		
+				fetchingWeatherData(cityName, countryName, unit);
+				break;
+	}
+})
+
+function addInputlEventListenerSwitch(type, selector, callback) {
+  document.addEventListener(type, event => {
+    const key = event.key;
+
+    switch(key) {
       case selector:
         callback(event);
         break; 
